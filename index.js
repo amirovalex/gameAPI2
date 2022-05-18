@@ -12,18 +12,93 @@ app.use("/", userRoutes);
 
 const http = require("http");
 const server = http.createServer(app);
-const { Server } = require("socket.io");
-// const io = new Server(server);
+
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
 });
+
+const clients = {};
+
+let players = {};
+let unmatched;
+
+io.on("connection", function (socket) {
+  let id = socket.id;
+
+  console.log("New client connected. ID: ", socket.id);
+  clients[socket.id] = socket;
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected. ID: ", socket.id);
+    delete clients[socket.id];
+    socket.broadcast.emit("clientdisconnect", id);
+  });
+
+  join(socket); // Fill 'players' data structure
+
+  if (opponentOf(socket)) {
+    socket.emit("game.begin", {
+      symbol: players[socket.id].symbol,
+    });
+    console.log("Game begins!!");
+
+    opponentOf(socket).emit("game.begin", {
+      symbol: players[opponentOf(socket).id].symbol,
+    });
+  }
+
+  socket.on("make.move", function (data) {
+    console.log("Make Move", data);
+    if (!opponentOf(socket)) {
+      console.log("opponent of is false");
+      return;
+    }
+
+    socket.emit("move.made", data);
+
+    opponentOf(socket).emit("move.made", data);
+  });
+
+  socket.on("disconnect", function () {
+    if (opponentOf(socket)) {
+      opponentOf(socket).emit("opponent.left");
+    }
+  });
+});
+
+const join = (socket) => {
+  console.log("joined!!");
+  players[socket.id] = {
+    opponent: unmatched,
+    symbol: "X",
+    socket: socket,
+  };
+
+  if (unmatched) {
+    players[socket.id].symbol = "O";
+    players[unmatched].opponent = socket.id;
+    unmatched = null;
+  } else {
+    unmatched = socket.id;
+  }
+};
+
+const opponentOf = (socket) => {
+  if (!players[socket.id].opponent) {
+    return;
+  }
+  return players[players[socket.id].opponent].socket;
+};
+
 io.on("connection", (socket) => {
+  let id = socket.id;
+
   console.log("a user connected");
   socket.on("message", (message) => {
     console.log(message);
-    io.emit("message", `${socket.id} said ${message}`);
+    io.emit("message", `${id} said ${message}`);
   });
 });
 
