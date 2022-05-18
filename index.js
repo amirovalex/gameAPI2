@@ -10,7 +10,9 @@ const app = express();
 const port = process.env.PORT || 7070;
 
 //MIDDLEWARES
-app.use(cors({ origin: "http://localhost:3000","https://amirovalex.github.io" }));
+app.use(
+  cors({ origin: ["http://localhost:3000", "https://amirovalex.github.io"] })
+);
 app.use(express.json());
 app.use("/", userRoutes);
 
