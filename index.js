@@ -15,11 +15,10 @@ app.use(express.json());
 app.use("/", userRoutes);
 
 //NODE SERVER
-const http = require("http");
-const server = http.createServer(app);
+const http = require("http").createServer(app);
 
 //Initialize socket
-const io = require("socket.io")(server, {
+const io = require("socket.io")(http, {
   cors: {
     origin: "https://amirovalex.github.io",
     methods: ["GET", "POST"],
@@ -29,7 +28,7 @@ const io = require("socket.io")(server, {
 const run = async () => {
   try {
     connectToSocket(io);
-    server.listen(port, () => {
+    http.listen(port, () => {
       console.log(`server is listening at http://localhost:${port}`);
     });
   } catch (error) {
