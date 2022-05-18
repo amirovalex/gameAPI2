@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 7070;
 
 //MIDDLEWARES
-// app.use(cors({ origin: "https://amirovalex.github.io" }));
+app.use(cors({ origin: "https://amirovalex.github.io" }));
 app.use(express.json());
 app.use("/", userRoutes);
 
@@ -19,11 +19,7 @@ const http = require("http");
 const server = http.createServer(app);
 
 //Initialize socket
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "https://amirovalex.github.io",
-  },
-});
+const io = require("socket.io")(server);
 
 const run = async () => {
   try {
