@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors");
+// const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 const userRoutes = require("./routes/user.js");
@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 7070;
 
 //MIDDLEWARES
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use("/", userRoutes);
 
@@ -19,9 +19,9 @@ const http = require("http").createServer(app);
 
 //Initialize socket
 const io = require("socket.io")(http, {
-  cors: {
-    origin: "https://amirovalex.github.io",
-    methods: ["GET", "POST"],
+  allowRequest: (req, callback) => {
+    const noOriginHeader = req.headers.origin === undefined;
+    callback(null, noOriginHeader);
   },
 });
 
