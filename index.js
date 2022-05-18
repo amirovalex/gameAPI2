@@ -15,18 +15,20 @@ app.use(express.json());
 app.use("/", userRoutes);
 
 //NODE SERVER
-const http = require("http");
-const server = http.createServer(app);
-
+// const http = require("http");
+// const server = http.createServer(app);
+const server = app.listen(port, () => {
+  console.log(`server is listening at http://localhost:${port}`);
+});
 //Initialize socket
 const io = require("socket.io")(server);
 
 const run = async () => {
   try {
     connectToSocket(io);
-    server.listen(port, () => {
-      console.log(`server is listening at http://localhost:${port}`);
-    });
+    // server.listen(port, () => {
+    //   console.log(`server is listening at http://localhost:${port}`);
+    // });
   } catch (error) {
     console.error(error);
   }
