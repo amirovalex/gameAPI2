@@ -22,7 +22,7 @@ const server = app.listen(port, () => {
 
 //Initialize socket
 const io = require("socket.io")(server, {
-  cors: { origin: "https://amirovalex.github.io/game/" },
+  cors: { origin: "*" },
 });
 
 const run = async () => {
