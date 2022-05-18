@@ -16,21 +16,18 @@ app.use("/", userRoutes);
 
 //NODE SERVER
 const http = require("http").createServer(app);
+const server = app.listen(port, () => {
+  console.log(`server is listening at http://localhost:${port}`);
+});
 
 //Initialize socket
-const io = require("socket.io")(http, {
-  allowRequest: (req, callback) => {
-    const noOriginHeader = req.headers.origin === undefined;
-    callback(null, noOriginHeader);
-  },
+const io = require("socket.io")(server, {
+  cors: { origin: "https://amirovalex.github.io" },
 });
 
 const run = async () => {
   try {
     connectToSocket(io);
-    http.listen(port, () => {
-      console.log(`server is listening at http://localhost:${port}`);
-    });
   } catch (error) {
     console.error(error);
   }
