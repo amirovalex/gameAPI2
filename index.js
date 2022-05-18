@@ -19,7 +19,12 @@ const http = require("http");
 const server = http.createServer(app);
 
 //Initialize socket
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "https://amirovalex.github.io",
+    methods: ["GET", "POST"],
+  },
+});
 
 const run = async () => {
   try {
