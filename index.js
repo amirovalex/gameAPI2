@@ -50,9 +50,7 @@ io.on("connection", function (socket) {
   }
 
   socket.on("make.move", function (data) {
-    console.log("Make Move", data);
     if (!opponentOf(socket)) {
-      console.log("opponent of is false");
       return;
     }
 
@@ -69,7 +67,6 @@ io.on("connection", function (socket) {
 });
 
 const join = (socket) => {
-  console.log("joined!!");
   players[socket.id] = {
     opponent: unmatched,
     symbol: "X",
