@@ -105,3 +105,36 @@
 //   }
 //   return true;
 // };
+
+// const getOpponentObject = (id) => {
+//   return players[players[id].opponent];
+// };
+
+// const getOpponentId = (id) => {
+//   console.log(" ID", id, " ID");
+//   console.log("OPPONENT ID", players[id].opponent, "OPPONENT ID");
+//   return players[id].opponent;
+// };
+
+// const joinRoomOtherServer = (socket) => {
+//   console.log(
+//     "JOINED ROOM FROM OTHER SERVER",
+//     socket,
+//     "JOINED ROOM FROM OTHER SERVER"
+//   );
+//   console.log(unmatched);
+//   players[socket.id] = {
+//     opponent: unmatched,
+//     symbol: socket.symbol,
+//   };
+
+//   if (unmatched) {
+//     players[socket.id].symbol = "O";
+//     players[unmatched].opponent = socket.id;
+//     unmatched = null;
+//   } else {
+//     unmatched = socket.id;
+//   }
+//   console.log("PLYAERS 2", players);
+//   return players[socket.id];
+// };

@@ -11,10 +11,10 @@ const connectToSocket = (io) => {
     let url = socket.handshake.query.urlHost;
     let idOtherServer = socket.handshake.query.id;
 
-    console.log(socket.handshake);
+    // console.log(socket.handshake);
     console.log("New client connected. ID: ", socket.id);
     clients[socket.id] = socket;
-    console.log("ID OTHER SERVER", idOtherServer);
+    // console.log("ID OTHER SERVER", idOtherServer);
 
     socket.on("disconnect", () => {
       console.log("Client disconnected. ID: ", socket.id);
@@ -53,9 +53,8 @@ const connectToSocket = (io) => {
         }
 
         secondAPI.emit("make.move", data);
-        console.log("IS GAME OVER", isGameOver(data.board));
         if (isGameOver(data.board)) {
-          console.log("hey");
+          // console.log("hey");
           socket.emit("game.end", { winMessage: "You won!" });
           opponentOf(socket).emit("game.end", { winMessage: "You lost!" });
         }
@@ -81,20 +80,15 @@ const connectToSocket = (io) => {
           symbol: players[opponentOf(socket).id].symbol,
         });
       }
-      console.log(
-        "PLAAAAAYEEERS AFTER GAME BEGINS",
-        players,
-        "PLAAAAAYEEERS AFTER GAME BEGINS"
-      );
 
       socket.on("make.move", (data) => {
-        console.log(data);
+        // console.log(data);
         if (!opponentOf(socket)) {
           return;
         }
 
         if (isGameOver(data.board)) {
-          console.log("hey");
+          // console.log("hey");
           socket.emit("game.end", { winMessage: "You won!" });
           opponentOf(socket).emit("game.end", { winMessage: "You lost!" });
         }
@@ -113,14 +107,14 @@ const connectToSocket = (io) => {
 };
 
 const joinRoom = (socket) => {
-  console.log("room joined", socket.id);
+  // console.log("room joined", socket.id);
   players[socket.id] = {
     opponent: unmatched,
     symbol: "X",
     socket: socket,
   };
   // console.log("what are the clients", clients);
-  console.log("PLYAERS", players);
+  // console.log("PLYAERS", players);
   if (unmatched) {
     players[socket.id].symbol = "O";
     players[unmatched].opponent = socket.id;
@@ -128,29 +122,6 @@ const joinRoom = (socket) => {
   } else {
     unmatched = socket.id;
   }
-};
-
-const joinRoomOtherServer = (socket) => {
-  console.log(
-    "JOINED ROOM FROM OTHER SERVER",
-    socket,
-    "JOINED ROOM FROM OTHER SERVER"
-  );
-  console.log(unmatched);
-  players[socket.id] = {
-    opponent: unmatched,
-    symbol: socket.symbol,
-  };
-
-  if (unmatched) {
-    players[socket.id].symbol = "O";
-    players[unmatched].opponent = socket.id;
-    unmatched = null;
-  } else {
-    unmatched = socket.id;
-  }
-  console.log("PLYAERS 2", players);
-  return players[socket.id];
 };
 
 const isUserOnOtherServer = (socket) => {
@@ -166,16 +137,6 @@ const opponentOf = (socket) => {
     return;
   }
   return players[players[socket.id].opponent].socket;
-};
-
-const getOpponentObject = (id) => {
-  return players[players[id].opponent];
-};
-
-const getOpponentId = (id) => {
-  console.log(" ID", id, " ID");
-  console.log("OPPONENT ID", players[id].opponent, "OPPONENT ID");
-  return players[id].opponent;
 };
 
 const isGameOver = (board) => {
@@ -201,19 +162,12 @@ const isGameOver = (board) => {
   return false;
 };
 
-const getUnmatched = () => {
-  return unmatched;
-};
+// const getUnmatched = () => {
+//   return unmatched;
+// };
 
 module.exports = {
   connectToSocket,
-  players,
-  unmatched,
-  joinRoom,
-  joinRoomOtherServer,
-  getUnmatched,
-  getOpponentObject,
-  getOpponentId,
 };
 // module.exports = players;
 // module.exports = unmatched;
