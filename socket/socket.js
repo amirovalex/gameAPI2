@@ -69,7 +69,6 @@ const connectToSocket = (io) => {
           secondAPI.emit("opponent.left");
         }
       });
-      // secondAPI.emit("");
       console.log(url);
     } else {
       if (opponentOf(socket)) {
