@@ -11,6 +11,16 @@ const port = process.env.PORT || 7070;
 
 //MIDDLEWARES
 // app.use(cors({ origin: "https://amirovalex.github.io" }));
+app.use(
+  cors({
+    origin: [
+      "https://amirovalex.github.io",
+      "http://localhost:3000",
+      "http://localhost:7070",
+    ],
+    methods: ["GET", "POST"],
+  })
+);
 app.use(express.json());
 app.use("/", userRoutes);
 
@@ -23,7 +33,7 @@ const io = require("socket.io")(server, {
   cors: {
     origin: [
       "https://amirovalex.github.io",
-      "http://localhost:3001",
+      "http://localhost:3000",
       "http://localhost:7070",
     ],
     methods: ["GET", "POST"],
